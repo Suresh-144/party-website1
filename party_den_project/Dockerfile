@@ -38,4 +38,4 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
 EXPOSE 8000
 
 # Use Gunicorn as the production-grade WSGI server
-CMD ["gunicorn", "--bind", "0.0.0.0:8000", "restaurant.wsgi:application"]
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "party_den_project.wsgi:application"]
