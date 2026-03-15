@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0a0a0a] text-white flex items-center justify-center min-h-screen">
+    <div class="max-w-md w-full p-10 bg-white/5 border border-white/10 rounded-[2.5rem] shadow-2xl">
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-2">Welcome <span class="text-orange-500">Back</span></h2>
+        <p class="text-white/40 font-mono text-xs uppercase tracking-widest mb-8">Enter your credentials</p>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %} <div class="space-y-4 login-form">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="w-full py-5 bg-white text-black font-black uppercase tracking-widest rounded-2xl hover:bg-orange-500 transition-colors">
+                Login
+            </button>
+        </form>
+
+        <div class="text-center pt-6">
+            <a href="{% url 'signup' %}" class="text-xs font-mono uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+                Don't have an account? Register
+            </a>
+        </div>
+    </div>
+
+    <style>
+        .login-form p { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .login-form label { font-family: monospace; font-size: 0.75rem; text-transform: uppercase; opacity: 0.4; }
+        .login-form input { 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 1rem; 
+            padding: 1rem; 
+            color: white;
+            outline: none;
+        }
+        .login-form input:focus { border-color: #f97316; }
+        .errorlist { color: #ef4444; font-size: 0.8rem; list-style: none; }
+    </style>
+</body>
+</html>

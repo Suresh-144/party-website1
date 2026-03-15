@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Party Den | Magic Moments</title>
+    <link rel="icon" type="image/jpeg" href="/logo.jpeg" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body { background-color: #0a0a0a; color: white; }
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #0a0a0a; }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #444; }
+        
+        .map-container {
+            border-radius: 20px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 0 40px rgba(0,0,0,0.8);
+        }
+    </style>
+</head>
+<body class="selection:bg-orange-500 selection:text-black">
+    <nav class="fixed top-0 left-0 right-0 z-40 bg-black/50 backdrop-blur-md border-b border-white/10">
+        <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <div class="w-8 h-8 bg-orange-500 rounded-lg flex items-center justify-center font-black text-black">D</div>
+                <span class="font-black uppercase tracking-tighter text-xl">The Party Den</span>
+            </div>
+            
+            <div class="flex items-center gap-6">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'profile' %}" class="text-sm font-mono text-orange-500 hover:underline">Hi, {{ user.username }}</a>
+                    <a href="{% url 'logout' %}" class="text-xs font-mono opacity-50 hover:text-red-500 transition-colors">Logout</a>
+                {% else %}
+                    <a href="{% url 'login' %}" class="text-sm font-mono hover:text-orange-500 transition-colors">Login</a>
+                    <a href="{% url 'signup' %}" class="text-sm font-mono border border-orange-500 px-4 py-1 rounded-full hover:bg-orange-500 hover:text-black transition-all">Sign Up</a>
+                {% endif %}
+            </div>
+        </div>
+    </nav>
+
+    <header class="relative h-[60vh] flex items-center justify-center overflow-hidden border-b border-white/10 pt-20">
+        <div class="absolute inset-0 z-0">
+            <img 
+                src="https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?auto=format&fit=crop&q=80&w=2070" 
+                alt="Party Background" 
+                class="w-full h-full object-cover opacity-30 scale-105"
+            />
+            <div class="absolute inset-0 bg-gradient-to-b from-transparent via-[#0a0a0a]/50 to-[#0a0a0a]" />
+        </div>
+
+        <div class="relative z-10 text-center px-4">
+            <h1 class="text-6xl md:text-8xl font-black tracking-tighter uppercase leading-tight">
+                The Party <span class="text-orange-500">Den</span>
+            </h1>
+            <p class="text-white/60 font-mono mt-4 uppercase tracking-[0.3em] text-sm">Vishakaratnam • Private Slots • 499/- HR</p>
+        </div>
+    </header>
+
+    <main class="max-w-7xl mx-auto px-6 py-20 space-y-32">
+        <section class="grid lg:grid-cols-2 gap-16 items-start">
+            <div class="space-y-6">
+                <h2 class="text-5xl font-bold tracking-tight">Reserve Your <br /><span class="italic font-serif text-orange-500">Private Slot</span></h2>
+                <p class="text-white/60 max-w-md leading-relaxed">
+                    Experience the ultimate private party destination. Hourly based bookings for birthdays, anniversaries, and mini-theatre experiences.
+                </p>
+                <div class="pt-6 space-y-3 font-mono text-sm opacity-80">
+                    <p class="flex items-center gap-3"><span class="text-orange-500">📍</span> YSR Colony, Vishakaratnam</p>
+                    <p class="flex items-center gap-3"><span class="text-orange-500">📞</span> 9398572500</p>
+                </div>
+            </div>
+
+            <div class="bg-white/5 p-8 rounded-3xl border border-white/10 backdrop-blur-sm">
+                <div class="flex items-center justify-between mb-8">
+                    <input type="date" id="dateInput" class="bg-transparent border-none text-xl font-bold text-orange-500 outline-none cursor-pointer">
+                    <span class="text-[10px] font-mono uppercase opacity-40 tracking-widest">Select Date</span>
+                </div>
+                <div id="slotGrid" class="grid grid-cols-3 sm:grid-cols-4 gap-3"></div>
+            </div>
+        </section>
+
+        <section class="mt-20 border-t border-white/10 pt-10">
+            <h2 class="text-5xl font-bold mb-8 text-center">Visit Our <span class="text-orange-500 italic">Studio</span></h2>
+            <div class="map-container max-w-4xl mx-auto h-96">
+                <iframe 
+                    src="https://maps.google.com/maps?q=YSR%20Colony%2C%20Vishakaratnam&t=&z=15&ie=UTF8&iwloc=&output=embed1" 
+                    width="100%" 
+                    height="100%" 
+                    style="border:0; filter: grayscale(1) invert(90%) contrast(120%);" 
+                    allowfullscreen="" 
+                    loading="lazy">
+                </iframe>
+            </div>
+            <p class="mt-6 text-center">
+                <a href="https://maps.google.com/maps?q=YSR%20Colony%2C%20Vishakaratnam&t=&z=15&ie=UTF8&iwloc=&output=embed2" target="_blank" class="text-orange-500 font-mono hover:underline">
+                    📍 Open in Google Maps
+                </a>
+            </p>
+        </section>
+
+        <section class="space-y-12">
+            <div class="flex flex-col md:flex-row md:items-end justify-between gap-8">
+                <div>
+                    <h2 class="text-5xl font-bold tracking-tight">The <span class="text-orange-500 italic">Den</span> Gallery</h2>
+                    <p class="text-white/60 mt-2">Capture and share your magic moments with us.</p>
+                </div>
+                <label class="group flex items-center gap-3 px-6 py-3 bg-white/5 border border-white/10 rounded-full cursor-pointer hover:bg-orange-500 hover:text-black transition-all">
+                    <span class="text-sm font-bold uppercase tracking-wider">Upload Moment</span>
+                    <input type="file" id="imageUpload" class="hidden" accept="image/*">
+                </label>
+            </div>
+            <div id="galleryGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"></div>
+        </section>
+    </main>
+
+    <footer class="border-t border-white/10 py-12 text-center text-white/40 text-[10px] font-mono uppercase tracking-[0.2em]">
+        © 2026 The Party Den • Magic Moments • Vishakaratnam
+    </footer>
+
+    <script>
+        const grid = document.getElementById('slotGrid');
+        const dateInput = document.getElementById('dateInput');
+        const galleryGrid = document.getElementById('galleryGrid');
+        const imageUpload = document.getElementById('imageUpload');
+
+        dateInput.value = new Date().toISOString().split('T')[0];
+
+        async function refreshSlots() {
+            const date = dateInput.value;
+            if (!date) return;
+            try {
+                const response = await fetch(`/api/bookings/?date=${date}`);
+                const booked = await response.json();
+                grid.innerHTML = '';
+                for (let i = 9; i <= 22; i++) {
+                    const isBooked = booked.includes(i);
+                    const btn = document.createElement('button');
+                    btn.className = `py-4 rounded-xl font-mono text-xs transition-all ${isBooked ? 'bg-white/5 text-white/20 cursor-not-allowed line-through' : 'bg-white/10 hover:bg-orange-500 hover:text-black hover:font-bold'}`;
+                    btn.innerText = i > 12 ? (i - 12) + ' PM' : i + (i === 12 ? ' PM' : ' AM');
+                    btn.disabled = isBooked;
+                    if (!isBooked) { btn.onclick = () => makeBooking(i); }
+                    grid.appendChild(btn);
+                }
+            } catch (err) { console.error("Error fetching slots:", err); }
+        }
+
+        async function makeBooking(slot) {
+            {% if not user.is_authenticated %}
+                alert("Please login to book a slot.");
+                window.location.href = "{% url 'login' %}";
+                return;
+            {% endif %}
+
+            const name = prompt("Enter your name:");
+            const phone = prompt("Enter your phone number:");
+            if (!name || !phone) return;
+            try {
+                const response = await fetch('/api/bookings/create/', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json', 'X-CSRFToken': '{{ csrf_token }}' },
+                    body: JSON.stringify({ name, phone, date: dateInput.value, slot })
+                });
+                if (response.ok) { alert("Booking Successful!"); refreshSlots(); } 
+                else { alert("Booking failed. Slot might have been taken."); }
+            } catch (err) { alert("Connection error."); }
+        }
+
+        async function refreshGallery() {
+            try {
+                const response = await fetch('/api/gallery/');
+                const images = await response.json();
+                galleryGrid.innerHTML = '';
+                images.forEach(img => {
+                    galleryGrid.innerHTML += `
+                        <div class="group relative aspect-[4/5] overflow-hidden rounded-2xl bg-white/5 border border-white/10">
+                            <img src="${img.image_url}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity p-6 flex items-end">
+                                <p class="text-xs font-mono tracking-wide">${img.caption || 'Magic Moment'}</p>
+                            </div>
+                        </div>`;
+                });
+            } catch (err) { console.error("Gallery failed to load", err); }
+        }
+
+        imageUpload.onchange = async () => {
+            {% if not user.is_authenticated %}
+                alert("Please login to upload photos.");
+                window.location.href = "{% url 'login' %}";
+                return;
+            {% endif %}
+
+            const file = imageUpload.files[0];
+            if (!file) return;
+            const caption = prompt("Enter a caption for this moment:", "Magic Moment");
+            const formData = new FormData();
+            formData.append('image', file);
+            formData.append('caption', caption || "Magic Moment");
+            try {
+                const response = await fetch('/api/gallery/upload/', {
+                    method: 'POST',
+                    headers: { 'X-CSRFToken': '{{ csrf_token }}' },
+                    body: formData
+                });
+                if (response.ok) { refreshGallery(); } 
+                else { alert("Upload failed. Ensure you are using a valid image file."); }
+            } catch (err) { alert("Upload error."); }
+        };
+
+        dateInput.onchange = refreshSlots;
+        refreshSlots();
+        refreshGallery();
+    </script>
+</body>
+</html>

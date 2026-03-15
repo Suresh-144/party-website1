@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-[#0a0a0a] text-white flex items-center justify-center min-h-screen">
+    <div class="max-w-md w-full p-10 bg-white/5 border border-white/10 rounded-[2.5rem] shadow-2xl">
+        <h2 class="text-4xl font-black uppercase tracking-tighter mb-2">Join The <span class="text-orange-500">Den</span></h2>
+        <p class="text-white/40 font-mono text-xs uppercase tracking-widest mb-8">Create your account</p>
+
+        <form method="POST" class="space-y-6">
+            {% csrf_token %}
+            
+            <div class="space-y-4 signup-form">
+                {{ form.as_p }}
+            </div>
+
+            <button type="submit" class="w-full py-5 bg-white text-black font-black uppercase tracking-widest rounded-2xl hover:bg-orange-500 transition-colors">
+                Register
+            </button>
+        </form>
+
+        <div class="text-center pt-6">
+            <a href="{% url 'login' %}" class="text-xs font-mono uppercase tracking-widest opacity-40 hover:opacity-100 transition-opacity">
+                Already have an account? Login
+            </a>
+        </div>
+    </div>
+
+    <style>
+        /* Basic styling for Django's default form labels and inputs */
+        .signup-form p { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+        .signup-form label { font-family: monospace; font-size: 0.75rem; text-transform: uppercase; opacity: 0.4; }
+        .signup-form input { 
+            background: rgba(255,255,255,0.05); 
+            border: 1px solid rgba(255,255,255,0.1); 
+            border-radius: 1rem; 
+            padding: 1rem; 
+            outline: none;
+            color: white;
+        }
+        .signup-form input:focus { border-color: #f97316; }
+        .helptext { font-size: 0.7rem; opacity: 0.3; line-height: 1; margin-top: 4px; }
+        .errorlist { color: #ef4444; font-size: 0.8rem; margin-bottom: 10px; }
+    </style>
+</body>
+</html>
