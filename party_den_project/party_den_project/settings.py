@@ -10,8 +10,13 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
 
-from pathlib import Path
 import os
+from pathlib import Path
+from dotenv import load_dotenv
+
+# Load environment variables from .env file
+load_dotenv()
+
 
 # 1. First, define BASE_DIR
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -21,12 +26,12 @@ MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media' 
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-uzb1cx*0ph6rknzn0k=f2zdcu%op3vjv6!=52f94g=1z39!o+e'
+SECRET_KEY = os.getenv('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = os.getenv('DEBUG') == 'True'
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = os.getenv('ALLOWED_HOSTS', '').split(',')
 
 # Application definition
 INSTALLED_APPS = [
