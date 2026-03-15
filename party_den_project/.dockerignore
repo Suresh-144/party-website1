@@ -1,6 +1,8 @@
+# Ignore files and directories that should not be included in the Docker image
 __pycache__
 *.pyc
 db.sqlite3
+
 .git
 .github
 venv
