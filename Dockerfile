@@ -12,7 +12,7 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/*
 
 # 2. Path Correction: Copy requirements from the restaurant subdirectory
-COPY restaurant/requirements.txt .
+COPY party_den_project/requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the entire project
