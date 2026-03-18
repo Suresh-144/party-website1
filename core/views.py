@@ -1,4 +1,3 @@
-from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -6,15 +5,52 @@ from django.contrib import messages
 from django.http import JsonResponse
 from django.contrib.auth.decorators import login_required
 from .models import Booking, Gallery
+from django.core.mail import send_mail
+from django.conf import settings
 import json
 
+def send_booking_confirmation(user_email, booking_details):
+    """
+    Sends a confirmation email using the email passed from the view.
+    """
+    subject = 'Booking Confirmed - The Party Den'
+    message = f'Hi! Your booking for {booking_details.date} at {booking_details.slot}:00 is confirmed.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [user_email]
+    
+    # fail_silently=False will help you see errors in your terminal during testing
+    send_mail(subject, message, email_from, recipient_list, fail_silently=False)
+
+def create_booking(request):
+    if request.method == 'POST':
+        try:
+            data = json.loads(request.body)
+            
+            # 1. Create the booking object in the database
+            booking = Booking.objects.create(
+                user=request.user if request.user.is_authenticated else None,
+                name=data['name'],
+                phone=data['phone'],
+                date=data['date'],
+                slot=data['slot']
+            )
+            
+            # 2. Trigger the email if the user is logged in and has an email
+            if request.user.is_authenticated and request.user.email:
+                try:
+                    send_booking_confirmation(request.user.email, booking)
+                except Exception as e:
+                    # Log SMTP errors without crashing the booking process
+                    print(f"Email failed to send: {e}")
+
+            return JsonResponse({'status': 'success'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': str(e)}, status=400)
+    return JsonResponse({'status': 'error', 'message': 'Invalid request method'}, status=405)
 
 @login_required
 def profile_view(request):
-    # Fetch all bookings for the logged-in user, newest first
     my_bookings = Booking.objects.filter(user=request.user).order_by('-date')
-    
-    # Optional: Fetch images uploaded by this user
     my_uploads = Gallery.objects.filter(user=request.user)
     
     context = {
@@ -22,14 +58,16 @@ def profile_view(request):
         'booking_count': my_bookings.count(),
         'uploads': my_uploads
     }
-    return render(request, 'profile.html', {'bookings': my_bookings})
-
+    return render(request, 'profile.html', context)
 
 def signup_view(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
+        email = request.POST.get('email')
         if form.is_valid():
-            user = form.save()
+            user = form.save(commit=False)
+            user.email = email
+            user.save()
             login(request, user)
             messages.success(request, "Registration successful.")
             return redirect('home')
@@ -56,31 +94,16 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     return redirect('home')
+
 def home(request):
-    # This renders the main HTML page
     return render(request, 'index.html')
 
 def get_booked_slots(request):
-    # Replaces app.get("/api/bookings")
     date = request.GET.get('date')
     slots = list(Booking.objects.filter(date=date).values_list('slot', flat=True))
     return JsonResponse(slots, safe=False)
 
-def create_booking(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        Booking.objects.create(
-            # This line ensures the booking is linked to the logged-in person
-            user=request.user if request.user.is_authenticated else None,
-            name=data['name'],
-            phone=data['phone'],
-            date=data['date'],
-            slot=data['slot']
-        )
-        return JsonResponse({'status': 'success'})
-
 def get_gallery(request):
-    # Fetch all images from the database
     images = Gallery.objects.all().order_by('-created_at')
     data = [
         {
@@ -95,11 +118,11 @@ def upload_to_gallery(request):
     if request.method == 'POST' and request.FILES.get('image'):
         image_file = request.FILES['image']
         caption = request.POST.get('caption', '')
-        booking_id = request.POST.get('booking_id') # Ensure this matches your JS key
+        booking_id = request.POST.get('booking_id')
 
         Gallery.objects.create(
             user=request.user,
-            booking_id=booking_id, # This will now work after the migration
+            booking_id=booking_id,
             image=image_file,
             caption=caption
         )
